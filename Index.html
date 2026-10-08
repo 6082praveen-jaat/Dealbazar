@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+  />
+
+  <meta name="theme-color" content="#ff6b00" />
+
+  <meta
+    name="description"
+    content="DealBazar - Shop the best deals online"
+  />
+
+  <title>DealBazar - Online Shopping</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+    }
+
+    /* HEADER */
+
+    header {
+      background: #ff6b00;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .topbar {
+      max-width: 1200px;
+      margin: auto;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      font-size: 23px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .search {
+      flex: 1;
+      position: relative;
+    }
+
+    .search input {
+      width: 100%;
+      padding: 11px 15px;
+      border-radius: 25px;
+      border: none;
+      outline: none;
+      background: white;
+      color: #222;
+    }
+
+    .cart-btn {
+      background: white;
+      color: #ff6b00;
+      border-radius: 22px;
+      padding: 9px 13px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    /* HERO */
+
+    .hero {
+      background: linear-gradient(135deg, #ff6b00, #ff9f43);
+      color: white;
+      padding: 35px 18px;
+    }
+
+    .hero-inner {
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .hero h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    .shop-btn {
+      background: white;
+      color: #ff6b00;
+      padding: 12px 22px;
+      border-radius: 25px;
+      font-weight: bold;
+    }
+
+    /* CATEGORIES */
+
+    .section {
+      max-width: 1200px;
+      margin: auto;
+      padding: 25px 16px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      margin-bottom: 15px;
+    }
+
+    .categories {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+
+    .categories::-webkit-scrollbar {
+      display: none;
+    }
+
+    .category {
+      min-width: 90px;
+      background: white;
+      border-radius: 12px;
+      padding: 15px 8px;
+      text-align: center;
+      box-shadow: 0 2px 7px rgba(0,0,0,0.08);
+      cursor: pointer;
+    }
+
+    .category-icon {
+      font-size: 30px;
+      margin-bottom: 7px;
+    }
+
+    .category span {
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    /* PRODUCTS */
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .product {
+      background: white;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: transform 0.2s;
+    }
+
+    .product:hover {
+      transform: translateY(-3px);
+    }
+
+    .product-img {
+      width: 100%;
+      height: 210px;
+      object-fit: cover;
+      background: #eee;
+    }
+
+    .product-info {
+      padding: 12px;
+    }
+
+    .product-name {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .rating {
+      color: #f5a623;
+      font-size: 14px;
+      margin-bottom: 7px;
+    }
+
+    .price {
+      font-size: 19px;
+      font-weight: bold;
+      color: #111;
+    }
+
+    .old-price {
+      font-size: 13px;
+      color: #888;
+      text-decoration: line-through;
+      margin-left: 5px;
+    }
+
+    .discount {
+      color: #159447;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .add-btn {
+      width: 100%;
+      background: #ff6b00;
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    /* EMPTY */
+
+    .empty {
+      text-align: center;
+      padding: 40px 10px;
+      color: #777;
+      display: none;
+    }
+
+    /* CART */
+
+    .cart-panel {
+      position: fixed;
+      right: -100%;
+      top: 0;
+      width: min(420px, 100%);
+      height: 100%;
+      background: white;
+      z-index: 2000;
+      transition: right 0.3s ease;
+      box-shadow: -5px 0 20px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart-panel.active {
+      right: 0;
+    }
+
+    .cart-header {
+      background: #ff6b00;
+      color: white;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .close-cart {
+      background: transparent;
+      color: white;
+      font-size: 25px;
+    }
+
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 10px;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .cart-item img {
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .cart-item-info {
+      flex: 1;
+    }
+
+    .cart-item-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .quantity {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .quantity button {
+      width: 27px;
+      height: 27px;
+      border-radius: 50%;
+      background: #eee;
+    }
+
+    .remove {
+      color: red;
+      background: none;
+      margin-top: 5px;
+      font-size: 12px;
+    }
+
+    .cart-footer {
+      border-top: 1px solid #ddd;
+      padding: 16px;
+    }
+
+    .total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .checkout {
+      width: 100%;
+      background: #ff6b00;
+      color: white;
+      padding: 13px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    /* PRODUCT MODAL */
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 3000;
+      padding: 15px;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: white;
+      width: min(600px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 15px;
+      padding: 20px;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      right: 15px;
+      top: 10px;
+      font-size: 25px;
+      background: none;
+    }
+
+    .modal-img {
+      width: 100%;
+      max-height: 350px;
+      object-fit: contain;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .modal h2 {
+      margin-bottom: 10px;
+    }
+
+    .modal-price {
+      font-size: 25px;
+      font-weight: bold;
+      color: #ff6b00;
+      margin: 10px 0;
+    }
+
+    .modal-description {
+      color: #666;
+      line-height: 1.6;
+      margin: 10px 0 20px;
+    }
+
+    /* FOOTER */
+
+    footer {
+      background: #222;
+      color: white;
+      text-align: center;
+      padding: 30px 15px;
+      margin-top: 30px;
+    }
+
+    footer p {
+      margin: 7px 0;
+      color: #ccc;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 800px) {
+      .products {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .product-img {
+        height: 170px;
+      }
+
+      .product-info {
+        padding: 10px;
+      }
+
+      .product-name {
+        font-size: 14px;
+      }
+
+      .price {
+        font-size: 17px;
+      }
+
+      .hero h1 {
+        font-size: 27px;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .topbar {
+        flex-wrap: wrap;
+      }
+
+      .logo {
+        width: 100%;
+      }
+
+      .search {
+        width: calc(100% - 60px);
+      }
+
+      .products {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .product-img {
+        height: 145px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+
+  <header>
+    <div class="topbar">
+
+      <div class="logo">
+        🛍️ DealBazar
+      </div>
+
+      <div class="search">
+        <input
+          type="search"
+          id="searchInput"
+          placeholder="Search products..."
+          oninput="searchProducts()"
+        />
+      </div>
+
+      <button class="cart-btn" onclick="openCart()">
+        🛒 Cart (<span id="cartCount">0</span>)
+      </button>
+
+    </div>
+  </header>
+
+  <!-- HERO -->
+
+  <section class="hero">
+    <div class="hero-inner">
+      <h1>Best Deals, Best Prices!</h1>
+
+      <p>
+        Discover amazing products at great prices.
+      </p>
+
+      <button
+        class="shop-btn"
+        onclick="document.getElementById('products').scrollIntoView()"
+      >
+        Shop Now
+      </button>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+
+  <section class="section">
+
+    <h2 class="section-title">
+      Categories
+    </h2>
+
+    <div class="categories">
+
+      <div class="category" onclick="filterCategory('All')">
+        <div class="category-icon">🔥</div>
+        <span>All</span>
+      </div>
+
+      <div class="category" onclick="filterCategory('Fashion')">
+        <div class="category-icon">👕</div>
+        <span>Fashion</span>
+      </div>
+
+      <div class="category" onclick="filterCategory('Electronics')">
+        <div class="category-icon">📱</div>
+        <span>Electronics</span>
+      </div>
+
+      <div class="category" onclick="filterCategory('Beauty')">
+        <div class="category-icon">💄</div>
+        <span>Beauty</span>
+      </div>
+
+      <div class="category" onclick="filterCategory('Home')">
+        <div class="category-icon">🏠</div>
+        <span>Home</span>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- PRODUCTS -->
+
+  <section class="section" id="products">
+
+    <h2 class="section-title">
+      🔥 Trending Deals
+    </h2>
+
+    <div class="products" id="productGrid"></div>
+
+    <div class="empty" id="emptyMessage">
+      No products found.
+    </div>
+
+  </section>
+
+  <!-- CART -->
+
+  <div class="cart-panel" id="cartPanel">
+
+    <div class="cart-header">
+
+      <h2>Your Cart</h2>
+
+      <button
+        class="close-cart"
+        onclick="closeCart()"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div class="cart-items" id="cartItems"></div>
+
+    <div class="cart-footer">
+
+      <div class="total">
+        <span>Total</span>
+        <span>₹<span id="cartTotal">0</span></span>
+      </div>
+
+      <button
+        class="checkout"
+        onclick="checkout()"
+      >
+        Proceed to Checkout
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- PRODUCT MODAL -->
+
+  <div class="modal" id="productModal">
+
+    <div class="modal-box">
+
+      <button
+        class="modal-close"
+        onclick="closeProduct()"
+      >
+        ×
+      </button>
+
+      <img
+        id="modalImage"
+        class="modal-img"
+        src=""
+        alt="Product"
+      />
+
+      <h2 id="modalName"></h2>
+
+      <div class="modal-price">
+        ₹<span id="modalPrice"></span>
+      </div>
+
+      <div id="modalRating"></div>
+
+      <p
+        id="modalDescription"
+        class="modal-description"
+      ></p>
+
+      <button
+        class="add-btn"
+        id="modalAddButton"
+      >
+        Add to Cart
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+
+  <footer>
+
+    <h2>🛍️ DealBazar</h2>
+
+    <p>Smart shopping. Better deals.</p>
+
+    <p>© 2026 DealBazar. All rights reserved.</p>
+
+  </footer>
+
+
+  <script>
+
+    /* PRODUCT DATABASE */
+
+    const products = [
+
+      {
+        id: 1,
+        name: "Premium Casual T-Shirt",
+        category: "Fashion",
+        price: 499,
+        oldPrice: 999,
+        rating: "⭐ 4.5",
+        image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=700&q=80",
+        description:
+          "Comfortable premium casual T-shirt suitable for everyday wear."
+      },
+
+      {
+        id: 2,
+        name: "Wireless Bluetooth Earbuds",
+        category: "Electronics",
+        price: 899,
+        oldPrice: 1999,
+        rating: "⭐ 4.4",
+        image: "https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?auto=format&fit=crop&w=700&q=80",
+        description:
+          "Compact wireless earbuds with a modern design and convenient charging case."
+      },
+
+      {
+        id: 3,
+        name: "Smart Watch",
+        category: "Electronics",
+        price: 1499,
+        oldPrice: 2999,
+        rating: "⭐ 4.3",
+        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=80",
+        description:
+          "Stylish smartwatch for everyday use."
+      },
+
+      {
+        id: 4,
+        name: "Beauty Care Kit",
+        category: "Beauty",
+        price: 699,
+        oldPrice: 1299,
+        rating: "⭐ 4.6",
+        image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=700&q=80",
+        description:
+          "A convenient beauty care collection for everyday personal care."
+      },
+
+      {
+        id: 5,
+        name: "Modern Home Lamp",
+        category: "Home",
+        price: 799,
+        oldPrice: 1499,
+        rating: "⭐ 4.5",
+        image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=700&q=80",
+        description:
+          "Modern decorative lamp for your bedroom, office or living room."
+      },
+
+      {
+        id: 6,
+        name: "Men's Sneakers",
+        category: "Fashion",
+        price: 1299,
+        oldPrice: 2499,
+        rating: "⭐ 4.4",
+        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80",
+        description:
+          "Comfortable casual sneakers designed for everyday use."
+      },
+
+      {
+        id: 7,
+        name: "Portable Speaker",
+        category: "Electronics",
+        price: 999,
+        oldPrice: 1999,
+        rating: "⭐ 4.
